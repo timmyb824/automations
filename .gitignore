@@ -1,0 +1,14 @@
+ansible/servers/inventory.ini
+ansible/servers/test.yaml
+ansible/servers/roles/Archive/
+ansible/servers/secrets/
+ansible/servers/playbooks/Archive/
+
+
+pyinfra/group_data/*
+!pyinfra/group_data/servers_example.py
+pyinfra/inventory.py
+
+
+terraform.tfstate.backup
+terraform.tfvars

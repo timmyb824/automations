@@ -1,0 +1,12 @@
+ssh_user: "{{ lookup('env','ssh_user') }}"
+ssh_remote_user: "{{ lookup('env','ssh_remote_user') }}"
+instance_owner: "{{ lookup('env','zuser') }}" #"{{ 'ubuntu' if ansible_distribution == 'Ubuntu' else 'tbryant' }}"
+ssh_key: "{{ lookup('file', '~/.ssh/id_master_key.pub') }}"
+hostname: "{{ ansible_hostname }}"
+ssh_password_encrypted: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          61326131316530313530663264303131623932363961363561633734366238343439343436323633
+          3465303639343262313135383764613435613837323835610a336363386633306361353062363461
+          61623461353861656533663935643739333662366539656334663266383933396266616164303634
+          3264386266356461630a623564363037626135636339663862383835323663363962653963653463
+          3531

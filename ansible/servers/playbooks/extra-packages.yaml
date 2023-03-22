@@ -1,0 +1,34 @@
+- name: Install nice to have packages
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Install with apt
+      become: true
+      apt:
+          - htop
+          - jq
+          - bat
+          - cpu-checker
+          - magic-wormhole
+          - silversearcher-ag
+          - tree
+      state: present
+      force_apt_get: yes
+      when:
+        - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+    - name: Install with yum
+      become: true
+      yum:
+          - htop
+          - jq
+          - bat
+          - cpu-checker
+          - magic-wormhole
+          - silversearcher-ag
+          - tree
+      state: present
+      update_cache: yes
+      when:
+        - ansible_distribution == "Amazon" or ansible_distribution == "CentOS"
