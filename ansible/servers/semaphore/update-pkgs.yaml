@@ -5,6 +5,7 @@
   tasks:
     - name: Update apt packages
       become: true
+      become_user: root
       ansible.builtin.apt:
         name: '*'
         state: latest
@@ -15,6 +16,7 @@
 
     - name: Update yum packages
       become: true
+      become_user: root
       ansible.builtin.yum:
         name: '*'
         state: latest
