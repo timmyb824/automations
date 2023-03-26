@@ -5,18 +5,18 @@
   tasks:
     - name: Update apt packages
       become: true
-      become_user: root
+      become_user: tbryant
       ansible.builtin.apt:
         name: '*'
         state: latest
-        update_cache: true
-        cache_valid_time: 86400 # One day
+        # update_cache: true
+        # cache_valid_time: 86400 # One day
       when:
         - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
     - name: Update yum packages
       become: true
-      become_user: root
+      become_user: tbryant
       ansible.builtin.yum:
         name: '*'
         state: latest
