@@ -1,9 +1,16 @@
 - name: Update packages via apt or yum depending on distro
   hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Pause 3 minutes
+      pause:
+        minutes: 3
 
   tasks:
     - name: Update apt packages
       become: true
+      become_method: sudo
       ansible.builtin.apt:
         name: '*'
         state: latest
@@ -14,6 +21,7 @@
 
     - name: Update yum packages
       become: true
+      become_method: sudo
       ansible.builtin.yum:
         name: '*'
         state: latest
