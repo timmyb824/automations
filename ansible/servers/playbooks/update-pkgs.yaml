@@ -3,10 +3,9 @@
   become: true
 
   tasks:
-    - name: Wait for sudo
-      shell:  while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 5; done;
-      when:
-        - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+    - name: Wait 2 minutes
+      pause:
+        minutes: 2
 
     - name: Update apt packages
       ansible.builtin.apt:
