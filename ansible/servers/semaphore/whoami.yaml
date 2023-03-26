@@ -1,0 +1,15 @@
+---
+- name: Check become success
+  hosts: all
+
+  tasks:
+    - name: Check whoami
+      ansible.builtin.command: whoami
+      register: whoami_out
+
+    - name: Check whoami become
+      ansible.builtin.command: whoami
+      become: true
+      become_method: sudo
+      become_user: root
+      register: whoami_become_out
