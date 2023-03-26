@@ -4,7 +4,7 @@
 
   pre_tasks:
     - name: Pause 3 minutes
-      pause:
+      ansible.builtin.pause:
         minutes: 3
 
   tasks:
