@@ -3,14 +3,8 @@
   become: true
 
   tasks:
-  pre_tasks:
-    - name: Pause 3 minutes
-      ansible.builtin.pause:
-        minutes: 3
-
     - name: Update apt packages
       become: true
-      become_method: sudo
       ansible.builtin.apt:
         name: '*'
         state: latest
@@ -21,7 +15,6 @@
 
     - name: Update yum packages
       become: true
-      become_method: sudo
       ansible.builtin.yum:
         name: '*'
         state: latest
