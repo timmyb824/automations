@@ -11,5 +11,5 @@
       ansible.builtin.command: whoami
       become: true
       become_method: sudo
-      become_user: root
+      become_user: tbryant
       register: whoami_become_out
