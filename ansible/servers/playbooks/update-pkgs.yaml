@@ -1,12 +1,9 @@
 - name: Update packages via apt or yum depending on distro
   hosts: all
   become: true
+  become_method: sudo
 
   tasks:
-    - name: Wait 2 minutes
-      pause:
-        minutes: 2
-
     - name: Update apt packages
       ansible.builtin.apt:
         name: '*'
