@@ -3,6 +3,7 @@ ansible/servers/test.yaml
 ansible/servers/roles/Archive/
 ansible/servers/secrets/
 ansible/servers/playbooks/Archive/
+ansible/servers/adhoc.yaml
 
 
 pyinfra/group_data/*

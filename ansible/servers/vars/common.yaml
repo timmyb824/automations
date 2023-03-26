@@ -1,6 +1,6 @@
-ssh_user: "{{ lookup('env','ssh_user') }}"
-ssh_remote_user: "{{ lookup('env','ssh_remote_user') }}"
-instance_owner: "{{ lookup('env','zuser') }}" #"{{ 'ubuntu' if ansible_distribution == 'Ubuntu' else 'tbryant' }}"
+ssh_user: "{{ lookup('env','SSH_USER') }}"
+ssh_remote_user: "{{ lookup('env','SSH_REMOTE_USER') }}"
+instance_owner: "{{ lookup('env','ZUSER') }}" #"{{ 'ubuntu' if ansible_distribution == 'Ubuntu' else 'tbryant' }}"
 ssh_key: "{{ lookup('file', '~/.ssh/id_master_key.pub') }}"
 hostname: "{{ ansible_hostname }}"
 ssh_password_encrypted: !vault |
