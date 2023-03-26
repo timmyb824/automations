@@ -1,10 +1,9 @@
 - name: Update packages via apt or yum depending on distro
   hosts: all
-  become: true
-  become_method: sudo
 
   tasks:
     - name: Update apt packages
+      become: true
       ansible.builtin.apt:
         name: '*'
         state: latest
@@ -14,7 +13,7 @@
         - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
     - name: Update yum packages
-      become_method: sudo
+      become: true
       ansible.builtin.yum:
         name: '*'
         state: latest
