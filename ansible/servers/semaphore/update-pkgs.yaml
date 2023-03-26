@@ -2,12 +2,12 @@
   hosts: all
   become: true
 
+  tasks:
   pre_tasks:
     - name: Pause 3 minutes
       ansible.builtin.pause:
         minutes: 3
 
-  tasks:
     - name: Update apt packages
       become: true
       become_method: sudo
