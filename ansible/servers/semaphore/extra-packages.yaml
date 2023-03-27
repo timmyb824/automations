@@ -4,7 +4,6 @@
 
   tasks:
     - name: Install with apt
-      become: true
       apt:
           - htop
           - jq

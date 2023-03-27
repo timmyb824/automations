@@ -3,7 +3,6 @@
 
   tasks:
     - name: Upgrade apt packages
-      become: true
       ansible.builtin.apt:
         upgrade: true
         update_cache: true
