@@ -1,11 +1,12 @@
-- name: Update packages via apt or yum depending on distro
+- name: Upgrade apt packages
   hosts: all
 
   tasks:
-    - name: Update apt packages
+    - name: Upgrade apt packages
+      become: true
       ansible.builtin.apt:
+        upgrade: true
         update_cache: true
         cache_valid_time: 86400 # One day
       when:
         - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
-
