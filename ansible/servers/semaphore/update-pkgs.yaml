@@ -1,6 +1,7 @@
 - name: Update packages via apt or yum depending on distro
   hosts: all
   become: true
+  become_user: tbryant
 
   tasks:
     - name: Update apt packages
