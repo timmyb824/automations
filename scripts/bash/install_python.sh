@@ -5,7 +5,7 @@ osInfo[/etc/alpine-release]="apk"
 osInfo[/etc/centos-release]="yum"
 osInfo[/etc/fedora-release]="dnf"
 
-for f in ${!osInfo[@]}
+for f in "${!osInfo[@]}"
 do
     if [[ -f $f ]];then
         package_manager=${osInfo[$f]}

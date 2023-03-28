@@ -1,10 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 read -p "Enter the namespace you want to delete all pods from: " NAMESPACE
 read -p "Force delete all pods? (true/false): " FORCE_DELETE
-
-# NAMESPACE="wazuh"
-# FORCE_DELETE="false"
 
 if [[ "$FORCE_DELETE" = "true" ]]; then
     echo "Force deleting all pods in namespace \"${NAMESPACE}\""

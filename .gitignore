@@ -13,3 +13,6 @@ pyinfra/inventory.py
 
 terraform.tfstate.backup
 terraform.tfvars
+.terraform.lock.hcl
+.terraform/
+terraform/cloudflare/Archive/
