@@ -6,7 +6,7 @@ pipeline {
 //     TF_VAR_region = "us-west-2"
 //   }
   tools {
-    terraform 'terraform'
+    terraform 'terraform latest'
   }
   stages {
     stage('Checkout code') {
