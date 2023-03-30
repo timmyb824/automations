@@ -6,10 +6,10 @@ pipeline {
 //     TF_VAR_region = "us-west-2"
 //   }
   stages {
-    stage('Checkout') {
-      steps {
-        git 'https://gitea.local.timmybtech.com/tbryant/automations.git'
-      }
+    stage('Checkout code') {
+        steps {
+            checkout scm
+        }
     }
     stage('Terraform Init') {
       steps {
