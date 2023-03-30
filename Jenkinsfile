@@ -5,6 +5,9 @@ pipeline {
 //     AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
 //     TF_VAR_region = "us-west-2"
 //   }
+  tools {
+    terraform 'terraform'
+  }
   stages {
     stage('Checkout code') {
         steps {
