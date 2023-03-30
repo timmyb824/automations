@@ -16,14 +16,14 @@ pipeline {
     }
     stage('Terraform Init') {
       steps {
-        dir('/terraform/cloudflare') {
+        dir('terraform/cloudflare') {
           sh 'terraform init'
         }
       }
     }
     stage('Terraform Plan') {
       steps {
-        dir('/terraform/cloudflare') {
+        dir('terraform/cloudflare') {
           sh 'terraform plan'
         }
       }
@@ -32,7 +32,7 @@ pipeline {
       steps {
         script {
           try {
-            dir('/terraform/cloudflare') {
+            dir('terraform/cloudflare') {
               sh 'terraform apply' // -auto-approve'
             }
             slackSend channel: '#alerts', color: 'good', message: "Terraform deployment succeeded."
