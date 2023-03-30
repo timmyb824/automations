@@ -16,6 +16,12 @@ pipeline {
         dir('/terraform/cloudflare') {
           sh 'terraform init'
         }
+            slackSend channel: '#alerts', color: 'good', message: "Terraform deployment succeeded."
+          } catch (Exception e) {
+            slackSend channel: '#alerts', color: 'danger', message: "Terraform deployment failed: ${e.getMessage()}"
+            throw e
+          }
+        }
       }
     }
     // stage('Terraform Plan') {
@@ -32,12 +38,12 @@ pipeline {
     //         dir('/terraform/cloudflare') {
     //           sh 'terraform apply -auto-approve'
     //         }
-            slackSend channel: '#alerts', color: 'good', message: "Terraform deployment succeeded."
-          } catch (Exception e) {
-            slackSend channel: '#alerts', color: 'danger', message: "Terraform deployment failed: ${e.getMessage()}"
-            throw e
-          }
-        }
+        //     slackSend channel: '#alerts', color: 'good', message: "Terraform deployment succeeded."
+        //   } catch (Exception e) {
+        //     slackSend channel: '#alerts', color: 'danger', message: "Terraform deployment failed: ${e.getMessage()}"
+        //     throw e
+        //   }
+        // }
     //   }
     // }
 //   }
