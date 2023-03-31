@@ -28,7 +28,7 @@ pipeline {
     stage('Terraform Init') {
       steps {
         dir('terraform/cloudflare') {
-          sh 'terraform init -backend-config="token=${TFC_TOKEN}"'
+          sh 'terraform init'
         }
       }
     }
