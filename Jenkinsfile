@@ -43,15 +43,16 @@ pipeline {
     }
     stage('Terraform Plan') {
       steps {
-        withVault([configuration: configuration, vaultSecrets: secrets])
+        withVault([configuration: configuration, vaultSecrets: secrets]) {
         dir('terraform/cloudflare') {
           sh "terraform plan -var 'domain=${DOMAIN}' -var 'zone_id=${ZONE_ID}' -var 'ip_address=${IP_ADDRESS}'"
         }
       }
     }
+  }
     stage('Terraform Apply') {
       steps {
-        withVault([configuration: configuration, vaultSecrets: secrets])
+        withVault([configuration: configuration, vaultSecrets: secrets]) {
         script {
           try {
             dir('terraform/cloudflare') {
@@ -62,6 +63,7 @@ pipeline {
             slackSend channel: '#repos', color: 'danger', message: "Terraform deployment failed: ${e.getMessage()}"
             throw e
           }
+         }
         }
       }
     }
