@@ -45,7 +45,7 @@ pipeline {
       steps {
         withVault([configuration: configuration, vaultSecrets: secrets]) {
         dir('terraform/cloudflare') {
-          sh "terraform plan -var 'domain=${DOMAIN}' -var 'zone_id=${ZONE_ID}' -var 'ip_address=${IP_ADDRESS}'"
+          sh "terraform plan -var 'domain=${env.DOMAIN}' -var 'zone_id=${env.ZONE_ID}' -var 'ip_address=${env.IP_ADDRESS}'"
         }
       }
     }
@@ -56,7 +56,7 @@ pipeline {
         script {
           try {
             dir('terraform/cloudflare') {
-              sh "terraform apply -var 'domain=${DOMAIN}' -var 'zone_id=${ZONE_ID}' -var 'ip_address=${IP_ADDRESS}'"
+              sh "terraform apply -var 'domain=${env.DOMAIN}' -var 'zone_id=${env.ZONE_ID}' -var 'ip_address=${env.IP_ADDRESS}'"
             }
             slackSend channel: '#repos', color: 'good', message: "Terraform deployment succeeded."
           } catch (Exception e) {
