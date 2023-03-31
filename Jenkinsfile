@@ -1,5 +1,5 @@
 def secrets = [
-  [path: 'secret/terraform/cloudflare', engineVersion: 2, secretValues: [
+  [path: 'secret/data/terraform/cloudflare', engineVersion: 2, secretValues: [
     [envVar: 'DOMAIN', vaultKey: 'DOMAIN'],
     [envVar: 'ZONE_ID', vaultKey: 'ZONE_ID'],
     [envVar: 'IP_ADDRESS', vaultKey: 'IP_ADDRESS']]],
