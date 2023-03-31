@@ -1,11 +1,11 @@
 def secrets = [
-  [path: 'secret/data/terraform/cloudflare', engineVersion: 2, secretValues: [
+  [path: 'terraform/cloudflare', engineVersion: 2, secretValues: [
     [envVar: 'DOMAIN', vaultKey: 'DOMAIN'],
     [envVar: 'ZONE_ID', vaultKey: 'ZONE_ID'],
     [envVar: 'IP_ADDRESS', vaultKey: 'IP_ADDRESS']]],
 ]
 
-def configuration = [vaultUrl: 'https://vault.local.timmybtech.com',  vaultCredentialId: 'vault-approle', engineVersion: 2]
+def configuration = [vaultUrl: 'https://vault.local.timmybtech.com',  vaultCredentialId: 'vault-approle', engineVersion: 2, prefixPath: "/secret/data"]
 
 pipeline {
   agent any
