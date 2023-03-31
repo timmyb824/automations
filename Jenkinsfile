@@ -15,17 +15,11 @@ pipeline {
   }
   stages {
     stage('Checkout code') {
-      agent {
-        label 'jenkins-slave'
-      }
         steps {
             checkout scm
         }
     }
     stage('Write CLI Config') {
-      agent {
-        label 'jenkins-slave'
-      }
       steps {
         writeFile file: '/var/jenkins_home/.terraformrc', text: """
           credentials "app.terraform.io" {
@@ -35,9 +29,6 @@ pipeline {
       }
     }
     stage('Terraform Init') {
-      agent {
-        label 'jenkins-slave'
-      }
       steps {
         dir('terraform/cloudflare') {
           sh 'terraform init'
@@ -45,34 +36,40 @@ pipeline {
       }
     }
     stage('Terraform Plan') {
-      podTemplate {
-        node('jenkins-slave') {
       steps {
+        withVault(buildWrapperOptions: [vaultSecrets: [
+          [path: 'secret/terraform/cloudflare', secretValues: [
+            [envVar: 'DOMAIN', vaultKey: 'domain'],
+            [envVar: 'ZONE_ID', vaultKey: 'zone_id'],
+            [envVar: 'IP_ADDRESS', vaultKey: 'ip_address']
+          ]]
+        ]])
         dir('terraform/cloudflare') {
           sh "terraform plan -var 'domain=${DOMAIN}' -var 'zone_id=${ZONE_ID}' -var 'ip_address=${IP_ADDRESS}'"
         }
       }
     }
-  }
-}
     stage('Terraform Apply') {
-      podTemplate {
-        node('jenkins-slave') {
       steps {
+        withVault(buildWrapperOptions: [vaultSecrets: [
+          [path: 'secret/terraform/cloudflare', secretValues: [
+            [envVar: 'DOMAIN', vaultKey: 'domain'],
+            [envVar: 'ZONE_ID', vaultKey: 'zone_id'],
+            [envVar: 'IP_ADDRESS', vaultKey: 'ip_address']
+          ]]
+        ]])DO
         script {
           try {
             dir('terraform/cloudflare') {
               sh "terraform apply -var 'domain=${DOMAIN}' -var 'zone_id=${ZONE_ID}' -var 'ip_address=${IP_ADDRESS}'"
             }
-            slackSend channel: '#repos', color: 'good', message: "Terraform deployment succeeded."
+            slackSend channel: '#alerts', color: 'good', message: "Terraform deployment succeeded."
           } catch (Exception e) {
-            slackSend channel: '#repos', color: 'danger', message: "Terraform deployment failed: ${e.getMessage()}"
+            slackSend channel: '#alerts', color: 'danger', message: "Terraform deployment failed: ${e.getMessage()}"
             throw e
-            }
-           }
-         }
-       }
-     }
-   }
+          }
+        }
+      }
+    }
   }
 }
