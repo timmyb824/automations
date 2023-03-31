@@ -56,7 +56,7 @@ pipeline {
         script {
           try {
             dir('terraform/cloudflare') {
-              sh "terraform apply -var 'domain=${env.DOMAIN}' -var 'zone_id=${env.ZONE_ID}' -var 'ip_address=${env.IP_ADDRESS}'"
+              sh "terraform apply -auto-approve -var 'domain=${env.DOMAIN}' -var 'zone_id=${env.ZONE_ID}' -var 'ip_address=${env.IP_ADDRESS}'"
             }
             slackSend channel: '#repos', color: 'good', message: "Terraform deployment succeeded."
           } catch (Exception e) {
