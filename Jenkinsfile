@@ -64,9 +64,9 @@ pipeline {
             dir('terraform/cloudflare') {
               sh "terraform apply -var 'domain=${DOMAIN}' -var 'zone_id=${ZONE_ID}' -var 'ip_address=${IP_ADDRESS}'"
             }
-            slackSend channel: '#alerts', color: 'good', message: "Terraform deployment succeeded."
+            slackSend channel: '#repos', color: 'good', message: "Terraform deployment succeeded."
           } catch (Exception e) {
-            slackSend channel: '#alerts', color: 'danger', message: "Terraform deployment failed: ${e.getMessage()}"
+            slackSend channel: '#repos', color: 'danger', message: "Terraform deployment failed: ${e.getMessage()}"
             throw e
             }
            }
