@@ -6,9 +6,9 @@ pipeline {
     // TF_VAR_region = "us-west-2"
     TF_CLI_CONFIG_FILE = "/var/jenkins_home/.terraformrc"
     TFC_TOKEN = credentials('terraform-cloud-token')
-    DOMAIN = env.DOMAIN
-    ZONE_ID = env.ZONE_ID
-    IP_ADDRESS = env.IP_ADDRESS
+    DOMAIN = "env.DOMAIN"
+    ZONE_ID = "env.ZONE_ID"
+    IP_ADDRESS = "env.IP_ADDRESS"
   }
   tools {
     terraform 'terraform latest'
