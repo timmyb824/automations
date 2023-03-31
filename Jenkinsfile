@@ -1,3 +1,12 @@
+def secrets = [
+  [path: 'secret/terraform/cloudflare', engineVersion: 2, secretValues: [
+    [envVar: 'DOMAIN', vaultKey: 'domain'],
+    [envVar: 'ZONE_ID', vaultKey: 'zone_id'],
+    [envVar: 'IP_ADDRESS', vaultKey: 'ip_address']]],
+]
+
+def configuration = [vaultUrl: 'https://vault.local.timmybtech.com',  vaultCredentialId: 'vault-approle', engineVersion: 2]
+
 pipeline {
   agent any
   environment {
@@ -6,9 +15,6 @@ pipeline {
     // TF_VAR_region = "us-west-2"
     TF_CLI_CONFIG_FILE = "/var/jenkins_home/.terraformrc"
     TFC_TOKEN = credentials('terraform-cloud-token')
-    DOMAIN = "env.DOMAIN"
-    ZONE_ID = "env.ZONE_ID"
-    IP_ADDRESS = "env.IP_ADDRESS"
   }
   tools {
     terraform 'terraform latest'
@@ -37,13 +43,7 @@ pipeline {
     }
     stage('Terraform Plan') {
       steps {
-        withVault(buildWrapperOptions: [vaultSecrets: [
-          [path: 'secret/terraform/cloudflare', secretValues: [
-            [envVar: 'DOMAIN', vaultKey: 'domain'],
-            [envVar: 'ZONE_ID', vaultKey: 'zone_id'],
-            [envVar: 'IP_ADDRESS', vaultKey: 'ip_address']
-          ]]
-        ]])
+        withVault([configuration: configuration, vaultSecrets: secrets])
         dir('terraform/cloudflare') {
           sh "terraform plan -var 'domain=${DOMAIN}' -var 'zone_id=${ZONE_ID}' -var 'ip_address=${IP_ADDRESS}'"
         }
@@ -51,13 +51,7 @@ pipeline {
     }
     stage('Terraform Apply') {
       steps {
-        withVault(buildWrapperOptions: [vaultSecrets: [
-          [path: 'secret/terraform/cloudflare', secretValues: [
-            [envVar: 'DOMAIN', vaultKey: 'domain'],
-            [envVar: 'ZONE_ID', vaultKey: 'zone_id'],
-            [envVar: 'IP_ADDRESS', vaultKey: 'ip_address']
-          ]]
-        ]])DO
+        withVault([configuration: configuration, vaultSecrets: secrets])
         script {
           try {
             dir('terraform/cloudflare') {
