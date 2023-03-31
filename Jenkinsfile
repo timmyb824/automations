@@ -5,7 +5,7 @@ def secrets = [
     [envVar: 'IP_ADDRESS', vaultKey: 'IP_ADDRESS']]],
 ]
 
-def configuration = [vaultUrl: 'https://vault.local.timmybtech.com',  vaultCredentialId: 'vault-token', engineVersion: 2, prefixPath: "/secret/data"]
+def configuration = [vaultUrl: 'https://vault.local.timmybtech.com/',  vaultCredentialId: 'vault-token', engineVersion: 2, prefixPath: "secret/data"]
 
 pipeline {
   agent any
