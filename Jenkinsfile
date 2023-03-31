@@ -1,10 +1,12 @@
 pipeline {
   agent any
-//   environment {
-//     AWS_ACCESS_KEY_ID = credentials('aws-access-key')
-//     AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
-//     TF_VAR_region = "us-west-2"
-//   }
+  environment {
+    // AWS_ACCESS_KEY_ID = credentials('aws-access-key')
+    // AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+    // TF_VAR_region = "us-west-2"
+    // TF_CLI_CONFIG_FILE = "/var/jenkins_home/.terraformrc"
+    TFC_TOKEN = credentials('terraform-cloud-token')
+  }
   tools {
     terraform 'terraform latest'
   }
@@ -17,7 +19,7 @@ pipeline {
     stage('Terraform Init') {
       steps {
         dir('terraform/cloudflare') {
-          sh 'terraform init'
+          sh 'terraform init -backend-config="token=${TFC_TOKEN}"'
         }
       }
     }
