@@ -58,9 +58,9 @@ pipeline {
             dir('terraform/cloudflare') {
               sh "terraform apply -auto-approve -var 'domain=${env.DOMAIN}' -var 'zone_id=${env.ZONE_ID}' -var 'ip_address=${env.IP_ADDRESS}'"
             }
-            slackSend channel: '#repos', color: 'good', message: "Terraform deployment succeeded."
+            slackSend channel: '#repos', color: 'good', message: ":white_check_mark: *${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
           } catch (Exception e) {
-            slackSend channel: '#repos', color: 'danger', message: "Terraform deployment failed: ${e.getMessage()}"
+            slackSend channel: '#repos', color: 'danger', message: ":x: Terraform deployment failed: ${e.getMessage()}"
             throw e
           }
          }
