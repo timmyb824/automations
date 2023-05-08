@@ -20,7 +20,7 @@
         mode: 0700
 
     - name: create a VM to use as a template
-      command: "qm create {{ vm.template_id }} --name {{ vm.template_name }} --memory {{ vm.template_memory }} --cores {{ vm.template_cores }} --net0 virtio,bridge=vmbr0 --agent 1"
+      command: "qm create {{ vm.template_id }} --name {{ vm.template_name }} --memory {{ vm.template_memory }} --cores {{ vm.template_cores }} --net0 virtio,bridge=vmbr0"
       become: yes
 
     - name: import disk image
