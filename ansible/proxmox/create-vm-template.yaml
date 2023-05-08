@@ -4,12 +4,15 @@
   name: "create VM template"
   vars:
     vm:
-      cloud_image_url: https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img
-      cloud_image_path: /tmp/ubuntu-2004-server-amd64.qcow2
-      template_id: 3000
-      template_name: ubuntu-2004-cloudinit-template
-      template_memory: 4096
+      # cloud_image_url: https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img
+      cloud_image_url: https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+      cloud_image_path: /tmp/ubuntu-2204-server-amd64.qcow2
+      template_id: 4301
+      template_name: ubuntu-2204-cloudinit-template
+      template_memory: 512
       template_cores: 2
+      ssh_keys: /root/temp/id_master_key.pub
+      storage: local-zfs3
   tasks:
     - name : download cloud image
       get_url:
@@ -18,19 +21,19 @@
         mode: 0700
 
     - name: create a VM to use as a template
-      command: "qm create {{ vm.template_id }} --name {{ vm.template_name }} --memory {{ vm.template_memory }} --cores {{ vm.template_cores }} --net0 virtio,bridge=vmbr0"
+      command: "qm create {{ vm.template_id }} --name {{ vm.template_name }} --memory {{ vm.template_memory }} --cores {{ vm.template_cores }} --net0 virtio,bridge=vmbr0 --sshkeys {{ vm.ssh_keys }} --agent 1"
       become: yes
 
     - name: import disk image
-      command: "qm importdisk {{ vm.template_id }} {{ vm.cloud_image_path }} local-zfs"
+      command: "qm importdisk {{ vm.template_id }} {{ vm.cloud_image_path }} {{ vm.storage }}"
       become: yes
 
     - name: configure VM to use imported image
-      command: "qm set {{ vm.template_id }} --scsihw virtio-scsi-pci --scsi0 local-zfs:vm-{{ vm.template_id }}-disk-0"
+      command: "qm set {{ vm.template_id }} --scsihw virtio-scsi-pci --scsi0 {{ vm.storage }}:vm-{{ vm.template_id }}-disk-0"
       become: yes
 
     - name: add cloud-init image as CDROM
-      command: "qm set {{ vm.template_id }} --ide2 local-zfs:cloudinit"
+      command: "qm set {{ vm.template_id }} --ide2 {{ vm.storage }}:cloudinit"
       become: yes
 
     - name: configure boot from the image

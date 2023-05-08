@@ -8,7 +8,7 @@ To create new cloud-init VM template in Proxmox:
 
 ```shell
 # the -K argument allows you to pass the sudo password
-ansible-playbook -i ansible/inventory.yaml ansible/create-vm-template.yaml -K
+ansible-playbook -i ansible/inventory.ini ansible/create-vm-template.yaml -K
 ```
 
 Refer to the `terraform/` folder for help provisioning VM's with the newly created template.

@@ -5,6 +5,7 @@
   vars:
     - user: "{{ lookup('env','ssh_user') }}"
     - remote_user: "{{ lookup('env','ssh_remote_user') }}"
+    - ssh_key: "{{ lookup('file', '~/.ssh/id_master_key.pub') }}"
   # created with:
   # python -c 'import crypt; print(crypt.crypt("password", "45678Hello23453SomeSalt"))'
   # above command requires the PassLib library: pip install passlib
