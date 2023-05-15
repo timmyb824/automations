@@ -15,7 +15,7 @@
     # https://github.com/artis3n/ansible-role-tailscale
     - role: artis3n.tailscale
       vars:
-        TAILSCALE_AUTHKEY: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
+        tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
         # tailscale_args: "--ssh"
 
     # https://github.com/staticdev/ansible-role-pyenv
