@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
   # SHELL
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "../ansible/servers/test.yaml"
+    ansible.playbook = "../ansible/servers/playbooks/loki_promtail.yaml"
     ansible.config_file = "../ansible/servers/ansible.cfg"
   end
 end

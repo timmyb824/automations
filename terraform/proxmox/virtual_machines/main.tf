@@ -4,7 +4,7 @@ resource "proxmox_vm_qemu" "node" {
   target_node       = "${var.pm_node}"
   # agent             = 1  # will error if agent is not already installed
 
-  clone             = "ubuntu-2004-cloudinit-template"
+  clone             = "ubuntu-2204-cloudinit-template"
 
   os_type           = "cloud-init"
   cores             = 2
@@ -18,7 +18,7 @@ resource "proxmox_vm_qemu" "node" {
     size            = "${var.vm_disk_size}"
     type            = "scsi"
     storage         = "${var.storage_name}"
-    iothread        = 1
+    iothread        = 0
   }
 
   network {
@@ -30,5 +30,4 @@ resource "proxmox_vm_qemu" "node" {
   # adjust the ip and gateway addresses as needed
   ipconfig0         = "ip=${var.vm_ip}/24,gw=${var.vm_gw}"
   sshkeys = file("${var.ssh_key_file}")
-
 }

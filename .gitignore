@@ -10,9 +10,11 @@ pyinfra/group_data/*
 !pyinfra/group_data/servers_example.py
 pyinfra/inventory.py
 
-
+terraform.tfstate
 terraform.tfstate.backup
 terraform.tfvars
 .terraform.lock.hcl
 .terraform/
 terraform/cloudflare/Archive/
+
+.vagrant/
