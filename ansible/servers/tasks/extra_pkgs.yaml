@@ -12,8 +12,6 @@
       - ripgrep
       - neofetch
       - git
-    state: present
-    force_apt_get: true
   when:
     - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 

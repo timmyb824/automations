@@ -1,5 +1,5 @@
 - name: Update packages via apt or yum depending on distro
-  hosts: all
+  hosts: adhoc
 
   tasks:
     - name: Update apt packages

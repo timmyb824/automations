@@ -6,8 +6,8 @@
   vars:
     config_dir: /home/{{ ansible_user}}/promtail
     loki_url: "{{ lookup('env','LOKI_ADDRESS') }}"
-    docker_install: false
-    tailscale_install: false
+    docker_install: true
+    tailscale_install: true
     loki_docker_install: true
     loki_syslog_install: true
 
@@ -22,6 +22,7 @@
     - role: artis3n.tailscale
       vars:
         tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
+        insecurely_log_authkey: true # for help with debugging tailscale up
         # tailscale_args: "--accept-routes" # use on linux to access subnet routing
       when: tailscale_install | default(false)
 
