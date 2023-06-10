@@ -4,17 +4,23 @@ ansible/servers/roles/Archive/
 ansible/servers/secrets/
 ansible/servers/playbooks/Archive/
 ansible/servers/adhoc.yaml
-
+ansible/servers/Archive/
 
 pyinfra/group_data/*
 !pyinfra/group_data/servers_example.py
 pyinfra/inventory.py
 
 terraform.tfstate
+terraform.tfstate*
 terraform.tfstate.backup
 terraform.tfvars
 .terraform.lock.hcl
 .terraform/
+terraform/oracle-cloud/Archive/
 terraform/cloudflare/Archive/
 aws_resources.txt
 .vagrant/
+terraform/oracle-cloud/homelab/core/Archive/
+tf_oci_inventory.ini
+terraform/oracle-cloud/homelab/COMMANDS.md
+terraform/oracle-cloud/tf-resource-discovery/COMMANDS.md

@@ -3,7 +3,7 @@
   become: true
   ansible.builtin.user:
     name: "{{ users }}"
-    password: "{{ ssh_password_encrypted }}"
+    password: "{{ ssh_password_hashed }}"
     groups:
       - sudo
     shell: /bin/bash
@@ -27,8 +27,9 @@
     loop_var: users
 
 - name: Check if sudoers file exists
+  become: true
   when: ssh_remote_user is defined
-  stat:
+  ansible.builtin.stat:
     path: /etc/sudoers.d/{{ ssh_remote_user }}
   register: sudoers_file
 

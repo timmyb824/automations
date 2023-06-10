@@ -12,11 +12,10 @@
     loki_syslog_install: true
 
   pre_tasks:
-    - name: Update apt cache
-      ansible.builtin.apt:
-        update_cache: true
-        cache_valid_time: 3600
+    - name: Include update packages
+      ansible.builtin.import_tasks: "../tasks/update_pkgs.yaml"
 
+  # Loki-promtail on an external server requires docker and tailscale (for private networking)
   roles:
     # https://github.com/artis3n/ansible-role-tailscale
     - role: artis3n.tailscale

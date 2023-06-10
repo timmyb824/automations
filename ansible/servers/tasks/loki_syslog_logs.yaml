@@ -11,6 +11,13 @@
     mode: '0755'
   when: not dir_stat.stat.exists
 
+- name: Set ownership and permissions for the app directory
+  ansible.builtin.file:
+    path: "{{ config_dir }}"
+    owner: "{{ instance_owner }}"
+    group: "{{ instance_owner }}"
+    mode: '0755'
+
 - name: Promtail configuration file
   ansible.builtin.template:
     dest: "{{ config_dir }}/promtail-config.yaml"

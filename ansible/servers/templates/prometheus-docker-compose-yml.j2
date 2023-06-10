@@ -12,7 +12,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - "/home/{{prom_user}}/prometheus:/etc/prometheus"
+      - "/home/{{ instance_owner }}/prometheus:/etc/prometheus"
       - "prometheus_data:/prometheus"
     restart: unless-stopped
     command:
