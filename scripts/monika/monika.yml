@@ -1,0 +1,26 @@
+probes:
+  - id: '1'
+    name: vm303 status
+    description: Check if vm303 is up
+    interval: 30 # in seconds
+    requests:
+      - url: 192.168.86.74
+        ping: true
+        alerts:
+          - assertion: response.status != 200
+            message: Status code is not 200
+          - assertion: response.time > 2000
+            message: Request took more than 2 seconds
+    incidentThreshold: 1
+    recoveryThreshold: 1
+    alerts:
+      - assertion: response.status != 200
+        message: vm303 is down
+
+notifications:
+  - id: desktop-notice
+    type: desktop
+  - id: slack-notice
+    type: slack
+    data:
+      url: ${SLACK_APP_URL}

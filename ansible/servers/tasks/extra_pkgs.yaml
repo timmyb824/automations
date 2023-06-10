@@ -6,12 +6,14 @@
       - htop
       - jq
       - bat
-      - cpu-checker
+      # - cpu-checker
       - magic-wormhole
       - tree
       - ripgrep
       - neofetch
       - git
+      - micro
+      - traceroute
   when:
     - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
@@ -26,6 +28,8 @@
       - tree
       - ripgrep
       - git
+      - micro
+      - traceroute
     state: present
   ignore_errors: true
   when:

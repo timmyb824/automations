@@ -18,3 +18,5 @@
 - src: geerlingguy.docker
 
 - src: stephdewit.nvm
+
+- src: avanov.pyenv

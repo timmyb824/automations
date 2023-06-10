@@ -3,6 +3,7 @@ from proxmoxer.core import ResourceException
 from urllib.parse import quote
 import os
 import argparse
+import time
 
 
 def get_vmid_from_name(proxmox, node, name):
@@ -44,7 +45,7 @@ def create_proxmox_vm(
         config = proxmox.nodes(node).qemu(newid).config.get()
 
         # Read and URL encode the ssh public key
-        with open(ssh_key_file, "r") as f:
+        with open(ssh_key_file, "r", encoding="utf-8") as f:
             ssh_public_key = f.read().strip()
         ssh_public_key_encoded = quote(ssh_public_key)
 
@@ -63,7 +64,7 @@ def create_proxmox_vm(
         )
 
         # Resize the disk (use + to increase by that amount)
-        proxmox.nodes(node).qemu(newid).resize.put(disk="scsi0", size="8G")
+        proxmox.nodes(node).qemu(newid).resize.put(disk="scsi0", size="16G")
 
         return f"VM {new_vm_name} created successfully."
 
@@ -72,13 +73,14 @@ def create_proxmox_vm(
     except Exception as exception:
         return f"Unexpected error: {str(exception)}"
 
-
 def delete_proxmox_vm(
     host,
     user,
     password,
     node,
     vm_name,
+    max_attempts=2,
+    retry_delay=5
 ):
     try:
         proxmox = ProxmoxAPI(
@@ -94,15 +96,24 @@ def delete_proxmox_vm(
         proxmox.nodes(node).qemu(vmid).status.stop.post()
 
         # Delete the VM
-        proxmox.nodes(node).qemu(vmid).delete()
-
-        return f"VM {vm_name} deleted successfully."
+        attempts = 0
+        while attempts < max_attempts:
+            try:
+                proxmox.nodes(node).qemu(vmid).delete()
+                return f"VM {vm_name} deleted successfully."
+            except ResourceException as exception:
+                # Retry on resource exception
+                attempts += 1
+                time.sleep(retry_delay)
+                if attempts >= max_attempts:
+                    return f"Proxmox command failed after {max_attempts} attempts: {str(exception)}"
+            except Exception as exception:
+                return f"Unexpected error: {str(exception)}"
 
     except ResourceException as exception:
         return f"Proxmox command failed: {str(exception)}"
     except Exception as exception:
         return f"Unexpected error: {str(exception)}"
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
