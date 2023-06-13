@@ -4,7 +4,7 @@ probes:
     description: Check if vm303 is up
     interval: 30 # in seconds
     requests:
-      - url: 192.168.86.74
+      - url: vm303.local.lan
         ping: true
         alerts:
           - assertion: response.status != 200

@@ -24,3 +24,4 @@ terraform/oracle-cloud/homelab/core/Archive/
 tf_oci_inventory.ini
 terraform/oracle-cloud/homelab/COMMANDS.md
 terraform/oracle-cloud/tf-resource-discovery/COMMANDS.md
+scripts/monika/monika.yml
