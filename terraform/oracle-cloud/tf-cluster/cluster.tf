@@ -3,7 +3,7 @@
 resource "oci_containerengine_cluster" "oke-cluster" {
     # Required
     compartment_id = oci_identity_compartment.tf-compartment.id
-    kubernetes_version = "v1.21.5"
+    kubernetes_version = "v1.25.4"
     name = "homelab-demo-cluster"
     vcn_id = module.vcn.vcn_id
 
