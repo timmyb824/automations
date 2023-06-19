@@ -24,7 +24,7 @@ def get_unacknowledged_problems(api_token):
         "auth": api_token,
         "id": 1
     }
-    response = requests.post(url, headers=headers, data=json.dumps(payload))
+    response = requests.post(url, headers=headers, data=json.dumps(payload), timeout=5)
     response.raise_for_status()
 
     return response.json()['result']

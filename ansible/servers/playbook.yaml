@@ -15,6 +15,7 @@
     loki_syslog_install: false
     prometheus_stack: false
     extra_pkgs: true
+    promtail_install: false
 
   vars_files:
     - ./vars/common.yaml
@@ -34,7 +35,7 @@
       vars:
         tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
         insecurely_log_authkey: true # for help with debugging tailscale up
-        # tailscale_args: "--accept-routes" # use on linux to access subnet routing; --accept-dns=false to disable dns
+        tailscale_args: "--accept-routes" # use on linux to access subnet routing; --accept-dns=false to disable dns
         # state: absent # use to remove tailscale
       when: tailscale_install | default(false)
 
@@ -62,7 +63,6 @@
       vars:
         docker_users:
           - "{{ instance_owner }}"
-          - "{{ ssh_remote_user }}"
       when: docker_install | default(false)
 
     # https://github.com/stephdewit/ansible-nvm
@@ -95,8 +95,12 @@
 
     # temp solution until I can figure out how to get the zabbix_agent role to work
     - name: Install zabbix agent 2
-      ansible.builtin.import_tasks: "./tasks/install_zabbix_agent2.yaml"
+      ansible.builtin.import_tasks: "./tasks/zabbix_agent2.yaml"
       when: zabbix_agent2_install | default(false)
+
+    - name: Install promtail
+      ansible.builtin.import_tasks: "./tasks/promtail.yaml"
+      when: promtail_install | default(false)
 
     - name: Install extra packages
       ansible.builtin.import_tasks: "./tasks/extra_pkgs.yaml"

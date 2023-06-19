@@ -44,7 +44,7 @@ def get_end_of_month_projection(current_cost) -> float:
 
     return projected_cost, projected_spending
 
-def send_slack_notification(message):
+def send_slack_notification(message) -> dict:
     client = WebClient(token=SLACK_BOT_TOKEN)
 
     return client.chat_postMessage(channel='#alerts', text=message)
@@ -61,17 +61,15 @@ def check_threshold_exceeded(projected_cost: float) -> bool:
             return False
 
 @app.task(daily.at("22:30"))
-# @app.task(every("10 seconds"))
 def main():
     current_cost = get_current_costs()
     projected_cost, projected_spending = get_end_of_month_projection(float(current_cost))
     print(f"Current month costs: {current_cost} USD")
     print(f"Projected end-of-month costs: {projected_cost:.2f} USD")
     print(f"Projected end-of-month spending: {projected_spending:.2f} USD")
-    if check_threshold_exceeded(projected_cost):
-        return
-    else:
+    if not check_threshold_exceeded(projected_cost):
         print("No threshold exceeded.\n")
+    return
 
 if __name__ == "__main__":
     app.run()

@@ -79,3 +79,6 @@ if __name__ == "__main__":
         delete_security_group(resources["SecurityGroupID"])
     else:
         print("Invalid command. Use either 'create' or 'delete'.")
+
+# TODO: The instance deletes but the security group does not due to a DependencyViolation
+# TODO: I should remove the aws_resources.txt file after the instance and security group are deleted
