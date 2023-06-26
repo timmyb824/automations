@@ -5,11 +5,16 @@ from oci.usage_api.models import RequestSummarizedUsagesDetails
 from rocketry import Rocketry
 from rocketry.conds import daily, every
 from slack_sdk import WebClient
+from gotify import Gotify
 
 app = Rocketry()
 
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 THRESHOLD = 5
+GOTIFY = Gotify(
+    base_url=os.environ["GOTIFY_HOST"],
+    app_token=os.environ["GOTIFY_TOKEN_ADHOC_SCRIPTS"],
+)
 
 # Load the config file
 config = oci.config.from_file("~/.oci/config")
@@ -89,21 +94,41 @@ def send_slack_notification(message) -> dict:
 
     return client.chat_postMessage(channel='#alerts', text=message)
 
+def send_gotify_notification(message) -> dict:
+    try:
+        return GOTIFY.create_message(
+            title="OCI Cost Alert",
+            message=message,
+            priority=5,
+            extras={"client::display": {"contentType": "text/markdown"}},
+        )
+    except Exception as exception:
+        print(exception)
+        return {}
+
 def check_threshold_exceeded(total_computed_amount: float) -> bool:
     if total_computed_amount > THRESHOLD:
         message = f"ATTENTION! OCI costs of {total_computed_amount:.2f} USD exceeds {THRESHOLD} USD!"
-        response = send_slack_notification(message)
-        if response['ok']:
-            print("\nSlack notification sent successfully!\n")
+        slack_response = send_slack_notification(message)
+        gotify_response = send_gotify_notification(message)
+        if slack_response["ok"] and gotify_response["id"]:
+            print("\nSlack and Gotify notifications sent successfully.\n")
+            print("###############################################\n")
+            return True
+        elif slack_response["ok"]:
+            print("\nSlack notification sent successfully.\n")
+            print("###############################################\n")
+            return True
+        elif gotify_response["id"]:
+            print("\nGotify notification sent successfully.\n")
             print("###############################################\n")
             return True
         else:
-            print("\nFailed to send Slack notification.\n")
-            print("###############################################\n")
+            print("Failed to send Slack and Gotify notifications.\n")
             return False
 
 # @app.task(daily.at("22:30"))
-@app.task(every("5 seconds"))
+@app.task(every("60 seconds"))
 def main() -> None:
     # Get the total cost for this month
     (total_computed_amount, total_computed_quantity) = get_usage_totals()

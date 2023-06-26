@@ -5,11 +5,16 @@ from slack_sdk import WebClient
 from datetime import datetime, timezone, date
 from rocketry import Rocketry
 from rocketry.conds import daily, every
+from gotify import Gotify
 
 app = Rocketry()
 
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 THRESHOLD = 5
+GOTIFY = Gotify(
+    base_url=os.environ["GOTIFY_HOST"],
+    app_token=os.environ["GOTIFY_TOKEN_ADHOC_SCRIPTS"],
+)
 
 def get_current_costs() -> float:
     client = boto3.client('ce', 'us-east-1')  # AWS Cost Explorer client
@@ -49,18 +54,39 @@ def send_slack_notification(message) -> dict:
 
     return client.chat_postMessage(channel='#alerts', text=message)
 
-def check_threshold_exceeded(projected_cost: float) -> bool:
+def send_gotify_notification(message) -> dict:
+    try:
+        return GOTIFY.create_message(
+            title="AWS Cost Alert",
+            message=message,
+            priority=5,
+            extras={"client::display": {"contentType": "text/markdown"}},
+        )
+    except Exception as exception:
+        print(exception)
+        return {}
+
+def check_threshold_exceeded(projected_cost: float) -> None:
     if projected_cost > THRESHOLD:
         message = f"ATTENTION! Projected end-of-month AWS costs of {projected_cost:.2f} USD exceeds {THRESHOLD} USD!"
-        response = send_slack_notification(message)
-        if response['ok']:
-            print("Slack notification sent successfully!\n")
+        slack_response = send_slack_notification(message)
+        gotify_response = send_gotify_notification(message)
+        if slack_response["ok"] and gotify_response["id"]:
+            print("Slack and Gotify notifications sent successfully.\n")
+            return True
+        elif slack_response["ok"]:
+            print("Slack notification sent successfully.\n")
+            return True
+        elif gotify_response["id"]:
+            print("Gotify notification sent successfully.\n")
             return True
         else:
-            print("Failed to send Slack notification.\n")
+            print("Failed to send Slack and Gotify notifications.\n")
             return False
 
-@app.task(daily.at("22:30"))
+
+# @app.task(daily.at("22:30"))
+@app.task(every("1 minutes"))
 def main():
     current_cost = get_current_costs()
     projected_cost, projected_spending = get_end_of_month_projection(float(current_cost))
