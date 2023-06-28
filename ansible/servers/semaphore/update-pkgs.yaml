@@ -6,7 +6,6 @@
       become: true
       ansible.builtin.apt:
         update_cache: true
-        cache_valid_time: 3600
       when:
         - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
@@ -14,14 +13,8 @@
       become: true
       ansible.builtin.yum:
         update_cache: true
-        cache_valid_time: 3600
       when:
         - ansible_distribution == "Amazon" or ansible_distribution == "CentOS" or ansible_distribution == "OracleLinux"
-
-    # - name: Send notification to Gotify
-    #   ansible.builtin.shell: curl "https://push.example.de/message?token=<apptoken>" -F "title=my title" -F "message=my message" -F "priority=5"
-    #   when: >
-    #     '"Update apt packages" in ansible_run_tags' or '"Update yum packages" in ansible_run_tags'
 
     - name: Send notification to Gotify
       ansible.builtin.uri:
@@ -30,7 +23,7 @@
         body_format: form-urlencoded
         body:
           title: "Ansible Update"
-          message: "{{ ansible_distribution }} packages have been updated"
+          message: "{{ ansible_distribution }} packages have been updated on {{ ansible_hostname }}"
           priority: "5"
       when: >
         '"Update apt packages" in ansible_run_tags' or '"Update yum packages" in ansible_run_tags'
