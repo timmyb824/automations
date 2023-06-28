@@ -16,7 +16,6 @@
           - ripgrep
           - neofetch
           - git
-          - micro
           - traceroute
       when:
         - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
@@ -32,11 +31,7 @@
           - tree
           - ripgrep
           - git
-          - micro
           - traceroute
         state: present
-      ignore_errors: true
       when:
-        - ansible_distribution == "Amazon" or ansible_distribution == "CentOS"
-
-
+        - when ansible_distribution == "CentOS" ansible_distribution == "RedHat" and ansible_distribution == "Fedora" and ansible_distribution == "OracleLinux"

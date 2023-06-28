@@ -5,8 +5,6 @@
     - name: Update apt packages
       become: true
       ansible.builtin.apt:
-        name: '*'
-        state: latest
         update_cache: true
         cache_valid_time: 86400 # One day
       when:
@@ -15,8 +13,6 @@
     - name: Update yum packages
       become: true
       ansible.builtin.yum:
-        name: '*'
-        state: latest
         update_cache: true
       when:
-        - ansible_distribution == "Amazon"
+        - ansible_distribution == "Amazon" or ansible_distribution == "CentOS" or ansible_distribution == "RedHat" or ansible_distribution == "OracleLinux"

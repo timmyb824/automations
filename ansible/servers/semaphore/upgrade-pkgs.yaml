@@ -9,3 +9,14 @@
         cache_valid_time: 86400 # One day
       when:
         - ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+    - name: Send notification to Gotify
+      ansible.builtin.uri:
+        url: "https://gotify.timmybtech.com/message?token=AoHTnmDZ1sx7Z4N"
+        method: POST
+        body_format: form-urlencoded
+        body:
+          title: "Ansible Upgrade"
+          message: "{{ ansible_distribution }} packages have been upgraded on {{ ansible_hostname }}"
+          priority: "5"
+      when: '"Upgrade apt packages" in ansible_run_tags'
